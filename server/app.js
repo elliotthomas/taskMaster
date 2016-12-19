@@ -28,18 +28,17 @@ app.get('/getTask', urlEncodedParser, function(req, res) {
             var query = client.query('SELECT * FROM tasks')
             var taskArray = [];
             query.on('row' , function(row) {
+                console.log('this is row', row);
                 taskArray.push(row);
             }); //end query on row
             query.on('end' , function() {
                 done();
                 console.log('Sending array back to client', taskArray);
-                
                 res.send(taskArray);
             }); //end query on end
         } //end else stmt
     }); //end pg connect
 }); //end get task
-
 
 app.post('/postTask', urlEncodedParser, function(req, res) {
     console.log('creating new task', req.body);
@@ -52,5 +51,29 @@ app.post('/postTask', urlEncodedParser, function(req, res) {
         } //end else statment
     }); //end pg connect to database
 }); //end post task
+
+app.put('/deleteTask', urlEncodedParser, function(req, res) {
+    console.log('delete task', req.body);
+    //connecting to the database
+    pg.connect(connectionString, function(err, client, done) {
+        if (err) {
+            console.log('error in connecting to database');
+        } else {
+            client.query("DELETE FROM tasks WHERE id = " + req.body.id +";");
+        } //end else statment
+    }); //end pg connect to database
+}); //end delete task
+
+app.put('/completeTask', urlEncodedParser, function(req, res) {
+    console.log('completing task', req.body);
+    //connecting to the database
+    pg.connect(connectionString, function(err, client, done) {
+        if (err) {
+            console.log('error in connecting to database');
+        } else {
+            client.query("UPDATE tasks SET complete = 'true' WHERE id = " + req.body.id +";");
+        } //end else statment
+    }); //end pg connect to database
+}); //end complete task
 
 app.use(express.static('public'));
