@@ -57,7 +57,7 @@ function getTask() {
 function deleteTask() {
     var deleteTask = {
         id: $(this).attr('data')
-    }
+    }; //end object
     console.log('this is the task I want to delete', deleteTask);
     $.ajax({
         type: 'PUT',
@@ -88,11 +88,11 @@ function completeTask() {
             console.log('error with ajax put call');
         }
     }); //end ajax call
-    get
+    getTask();
 }; //end completetask
 
 function displayTask(array) {
-    console.log('in display task', array.length)
+    console.log('in display task', array[0].complete)
         var allTasks = '<tr><td>Task</td><td>Complete Task<td>Delete Task</td>'
         for (var i = 0; i < array.length; i++) {
             if (array[i].complete == true) {
